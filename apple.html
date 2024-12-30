@@ -4,13 +4,20 @@
         <meta charset="utf-8" />
         <title>모델링 스크롤 제어</title>
         <style>
+            :root {
+            --shadow-color: #252222;
+            --shadow-color-light: white;
+            }
+
             body {
                 margin: 0;
                 padding: 0;
                 overflow-x: hidden;
+                font-family: "Archivo", sans-serif;
             }
             h1 {
                 font-size: 60px;
+                text-align: center; /* 가운데 정렬 추가 */
             }
             #canvasWrap {
                 position: fixed;
@@ -20,28 +27,102 @@
             }
             article {
                 position: absolute;
-                width: 300px;
+                width: 100%; /* 전체 너비로 변경 */
+                top: 0;
+                left: 0;
             }
             section {
                 font-size: 30px;
                 width: 100%;
                 padding: 40vh 50px;
-                /* border-bottom: 4px solid red; */
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* 수평 중앙 정렬 */
+                justify-content: center; /* 수직 중앙 정렬 */
+                text-align: center; /* 텍스트 중앙 정렬 */
+            }
+            section > div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 65px;
+                font-family: "Archivo Black", "Archivo", sans-serif;
+                font-weight: normal;
+                color: white;
+                animation: neon 3s infinite;
+                letter-spacing: -2px; 
+            }
+
+            @keyframes neon {
+            0% {
+                text-shadow: -1px -1px 1px var(--shadow-color-light), -1px 1px 1px var(--shadow-color-light), 1px -1px 1px var(--shadow-color-light), 1px 1px 1px var(--shadow-color-light),
+                0 0 3px var(--shadow-color-light), 0 0 10px var(--shadow-color-light), 0 0 20px var(--shadow-color-light),
+                0 0 30px var(--shadow-color), 0 0 40px var(--shadow-color), 0 0 50px var(--shadow-color), 0 0 70px var(--shadow-color), 0 0 100px var(--shadow-color), 0 0 200px var(--shadow-color);
+            }
+            50% {
+                text-shadow: -1px -1px 1px var(--shadow-color-light), -1px 1px 1px var(--shadow-color-light), 1px -1px 1px var(--shadow-color-light), 1px 1px 1px var(--shadow-color-light),
+                0 0 5px var(--shadow-color-light), 0 0 15px var(--shadow-color-light), 0 0 25px var(--shadow-color-light),
+                0 0 40px var(--shadow-color), 0 0 50px var(--shadow-color), 0 0 60px var(--shadow-color), 0 0 80px var(--shadow-color), 0 0 110px var(--shadow-color), 0 0 210px var(--shadow-color);
+            }
+            100% {
+                text-shadow: -1px -1px 1px var(--shadow-color-light), -1px 1px 1px var(--shadow-color-light), 1px -1px 1px var(--shadow-color-light), 1px 1px 1px var(--shadow-color-light),
+                0 0 3px var(--shadow-color-light), 0 0 10px var(--shadow-color-light), 0 0 20px var(--shadow-color-light),
+                0 0 30px var(--shadow-color), 0 0 40px var(--shadow-color), 0 0 50px var(--shadow-color), 0 0 70px var(--shadow-color), 0 0 100px var(--shadow-color), 0 0 200px var(--shadow-color);
+            }
             }
         </style>
         <script src="./iphone2.js" type="module" defer></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://fonts.googleapis.com/css?family=Archivo+Black&display=swap" rel="stylesheet">
     </head>
     <body>
         <div id="canvasWrap"></div>
         <article>
-            <section><h1>타이틀</h1></section>
-            <section>내용1</section>
-            <section>내용2</section>
-            <section>내용3</section>
-            <section>내용4</section>
-            <section>내용5</section>
-            <section>내용6</section>
-            <section>내용7</section>
+            <section>
+                <div class="text-7xl mt-14 text-white">
+                    <p class="logo">새로운 시대의 시작</p>
+                </div>
+            </section>
+            <section>
+                <p class="flex mt-20 text-[8rem] font-bold text-white">
+                    <span class="-ml-[17rem]">iPhone</span>
+                    <span class="ml-[31rem]">16</span>
+                </p>
+            </section>
+            <section>
+                <div class="text-white/75 font-bold">
+                    <div>당신의 삶을 이해하는</div>
+                    <div class="mb-6">퍼스널 AI</div>
+                    <img src="./model/apple_intelligence_hero_logo__j0xriz4ero2u_large.png" class="w-full"/>
+                </div>
+            </section>
+            <section>
+                <div>다섯가지</div>
+                <div>컬러</div>
+            </section>
+            <section>
+                <div>
+                    <div>월등히</div>
+                    <div>빠르고</div>
+                </div>
+                <div>
+                    <div>월등히</div>
+                    <div>스마트하게</div>
+                </div>
+            </section>
+            <section>
+                <div>
+                    <div>상상을</div>
+                    <div>현실로</div>
+                </div>
+                <div>
+                    <div>Think Difference</div>
+                    <div>Again</div>
+                </div>
+            </section>
         </article>
     </body>
 </html>
