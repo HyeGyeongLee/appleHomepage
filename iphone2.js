@@ -377,6 +377,42 @@ const scrollFunc = () => {
         if (sunLight) sunLight.intensity = 3.0;
         if (fillLight) fillLight.intensity = 1.5;
     }
+
+    
+    const iphoneSection5 = sections[5];
+    const iphoneSectionTop5 = iphoneSection5.offsetTop;
+    const iphoneSectionBottom5 = iphoneSectionTop5 + iphoneSection5.offsetHeight;
+
+    const iphoneSection6 = sections[6];
+    const iphoneSectionTop6 = iphoneSection6.offsetTop;
+    const iphoneSectionBottom6 = iphoneSectionTop6 + iphoneSection6.offsetHeight;
+    
+    if (scrollTop >= iphoneSectionTop5 - 500 && scrollTop <= iphoneSectionBottom5 || scrollTop >= iphoneSectionTop6 && scrollTop <= iphoneSectionBottom6) {
+        // 모든 모델을 투명하게
+        if (model) {
+            model.traverse((child) => {
+                if (child.isMesh && child.material && child.material.isMeshStandardMaterial) {
+                    child.material.opacity = 0; // 완전 투명
+                }
+            });
+        }
+    
+        // 컬러 모델들도 투명하게
+        [window.pinkModel, window.blueModel, window.whiteModel, window.blackModel].forEach(colorModel => {
+            if (colorModel) {
+                colorModel.traverse((child) => {
+                    if (child.isMesh && child.material && child.material.isMeshStandardMaterial) {
+                        child.material.opacity = 0; // 완전 투명
+                    }
+                });
+            }
+        });
+    
+        // 조명도 끄기
+        if (ambientLight) ambientLight.intensity = 0;
+        if (sunLight) sunLight.intensity = 0;
+        if (fillLight) fillLight.intensity = 0;
+    }
 };
 
 window.addEventListener("scroll", scrollFunc);
