@@ -74,7 +74,7 @@ const gltfLoadFunc = (modelName) => {
 
             // 핑크 모델 위치 설정
             window.pinkModel.scale.set(scaleNum, scaleNum, scaleNum);
-            window.pinkModel.position.set(-100, 0, 0); // x축으로 이동
+            window.pinkModel.position.set(0, 0, -100); // x축으로 이동
             window.pinkModel.rotation.y = 5.9;
             scene.add(window.pinkModel);
 
@@ -94,7 +94,7 @@ const gltfLoadFunc = (modelName) => {
 
             // 블루 모델 위치 설정
             window.blueModel.scale.set(scaleNum, scaleNum, scaleNum);
-            window.blueModel.position.set(-200, 0, 0); // x축으로 이동
+            window.blueModel.position.set(0, 0, -100); // x축으로 이동
             window.blueModel.rotation.y = 5.9;
             scene.add(window.blueModel);
 
@@ -114,7 +114,7 @@ const gltfLoadFunc = (modelName) => {
 
             // 화이트 모델 위치 설정
             window.whiteModel.scale.set(scaleNum, scaleNum, scaleNum);
-            window.whiteModel.position.set(-300, 0, 0); // x축으로 이동
+            window.whiteModel.position.set(0, 0, -100); // x축으로 이동
             window.whiteModel.rotation.y = 5.9;
             scene.add(window.whiteModel);
 
@@ -136,7 +136,7 @@ const gltfLoadFunc = (modelName) => {
    
             // 블랙 모델 위치 설정
             window.blackModel.scale.set(scaleNum, scaleNum, scaleNum);
-            window.blackModel.position.set(-400, 0, 0); // x축으로 이동
+            window.blackModel.position.set(0, 0, -100); // x축으로 이동
             window.blackModel.rotation.y = 5.9;
             scene.add(window.blackModel);
    
@@ -225,6 +225,8 @@ window.addEventListener("resize", stageResize);
 let scrollTop = 0;
 const sections = document.querySelectorAll('section');
 
+let colorAnimationExecuted = false;
+
 const scrollFunc = () => {
     scrollTop = window.scrollY;
 
@@ -248,53 +250,84 @@ const scrollFunc = () => {
             }
         });
 
-           // 핑크 모델 (존재하는 경우)
-           if (window.pinkModel || window.blueModel || window.whiteModel || window.blackModel) {
-            window.pinkModel.traverse((child) => {
-                if (child.isMesh && child.material && child.material.isMeshStandardMaterial) {
-                    // 다섯가지 컬러 섹션에서만 보이게 처리
-                    if (scrollTop >= colorSectionTop && scrollTop <= colorSectionBottom) {
-                        child.material.opacity = 1; // 완전 불투명
-                    } else {
-                        child.material.opacity = 0; // 완전 투명
-                    }
+        // 컬러 섹션에 진입했고, 아직 애니메이션이 실행되지 않았을 때
+        if (scrollTop >= colorSectionTop && scrollTop <= colorSectionBottom && !colorAnimationExecuted) {
+            colorAnimationExecuted = true; // flag를 true로 설정
+
+            // 투명도 설정
+            [window.pinkModel, window.blueModel, window.whiteModel, window.blackModel].forEach(model => {
+                if (model) {
+                    model.traverse((child) => {
+                        if (child.isMesh && child.material && child.material.isMeshStandardMaterial) {
+                            child.material.opacity = 1;
+                        }
+                    });
                 }
             });
 
-            window.blueModel.traverse((child) => {
-                if (child.isMesh && child.material && child.material.isMeshStandardMaterial) {
-                    // 다섯가지 컬러 섹션에서만 보이게 처리
-                    if (scrollTop >= colorSectionTop && scrollTop <= colorSectionBottom) {
-                        child.material.opacity = 1; // 완전 불투명
-                    } else {
-                        child.material.opacity = 0; // 완전 투명
-                    }
-                }
-            });
+            // 시간차를 두고 position 변경 (한 번만 실행)
+            setTimeout(() => {
+                const startX = 0;
+                const endXPink = -100;
+                const endXblue = -200;
+                const endXwhite = -300;
+                const endXblack = -400;
+                const duration = 500;
+                const startTime = performance.now();
 
-            window.whiteModel.traverse((child) => {
-                if (child.isMesh && child.material && child.material.isMeshStandardMaterial) {
-                    // 다섯가지 컬러 섹션에서만 보이게 처리
-                    if (scrollTop >= colorSectionTop && scrollTop <= colorSectionBottom) {
-                        child.material.opacity = 1; // 완전 불투명
-                    } else {
-                        child.material.opacity = 0; // 완전 투명
-                    }
-                }
-            });
+                function animate(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
 
-            window.blackModel.traverse((child) => {
-                if (child.isMesh && child.material && child.material.isMeshStandardMaterial) {
-                    // 다섯가지 컬러 섹션에서만 보이게 처리
-                    if (scrollTop >= colorSectionTop && scrollTop <= colorSectionBottom) {
-                        child.material.opacity = 1; // 완전 불투명
-                    } else {
-                        child.material.opacity = 0; // 완전 투명
+                    if(window.pinkModel) {
+                        const currentX = startX + (endXPink - startX) * progress;
+                        window.pinkModel.position.x = currentX;
+                        window.pinkModel.position.z = -20;
+                    }
+                    
+                    if (window.blueModel) {
+                        const currentX = startX + (endXblue - startX) * progress;
+                        window.blueModel.position.x = currentX;
+                        window.blueModel.position.z = -30;
+                    }
+                      
+                    if (window.whiteModel) {
+                        const currentX = startX + (endXwhite - startX) * progress;
+                        window.whiteModel.position.x = currentX;
+                        window.whiteModel.position.z = -40;
+
+                    }
+
+                    if (window.blackModel) {
+                        const currentX = startX + (endXblack - startX) * progress;
+                        window.blackModel.position.x = currentX;
+                        window.blackModel.position.z = -50;
+
+                    }
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
                     }
                 }
+
+                requestAnimationFrame(animate);
+            }, 100);
+        } else if (scrollTop < colorSectionTop || scrollTop > colorSectionBottom) {
+            // 섹션을 벗어났을 때 모델들을 투명하게 처리
+            [window.pinkModel, window.blueModel, window.whiteModel, window.blackModel].forEach(model => {
+                if (model) {
+                    model.traverse((child) => {
+                        if (child.isMesh && child.material && child.material.isMeshStandardMaterial) {
+                            child.material.opacity = 0;
+                        }
+                    });
+                }
             });
+            // 컬러 섹션을 완전히 벗어났을 때 flag 초기화 (다시 진입할 때를 위해)
+            if (scrollTop < colorSectionTop) {
+                colorAnimationExecuted = false;
+            }
         }
-
 
         // 다섯가지 컬러 섹션 이전까지만 회전 및 포지셔닝
         if (scrollTop < colorSectionTop) {
